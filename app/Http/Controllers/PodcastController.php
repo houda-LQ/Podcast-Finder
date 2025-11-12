@@ -6,7 +6,6 @@ use App\Models\Podcast;
 use App\Http\Requests\StorePodcastRequest;
 use App\Http\Requests\UpdatePodcastRequest;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-use Ramsey\Uuid\Type\Integer;
 
 class PodcastController extends Controller
 {
@@ -31,12 +30,13 @@ class PodcastController extends Controller
      */
     public function store(StorePodcastRequest $request)
 {
+    $this->authorize('create', Podcast::class);
+
     $data = $request->validated();
 
     if ($request->hasFile('image')) {
-        // Upload Cloudinary
         $uploadedFile = Cloudinary::upload($request->file('image')->getRealPath());
-        $data['image'] = $uploadedFile->getSecurePath(); // URL finale
+        $data['image'] = $uploadedFile->getSecurePath(); 
     }
 
     $podcast = Podcast::create($data);
@@ -74,12 +74,17 @@ class PodcastController extends Controller
    public function update(UpdatePodcastRequest $request, $id)
 {
     $podcast = Podcast::findOrFail($id);
+
+     $this->authorize('update', $podcast);
+
     $data = $request->validated();
+    
 
      if ($request->hasFile('image')) {
         $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
         $data['image'] = $uploadedFileUrl;
     }
+
 
     $podcast->update($data);
 
@@ -93,8 +98,12 @@ class PodcastController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Podcast $podcast)
-    {
-        //
+    public function destroy($id){
+        $podcast=Podcast::findOrFail($id);
+        $this->authorize('delete', $podcast);
+
+        $podcast->delete();
+        return response()->json(["message"=>"Cours supprimé"]);
     }
+
 }

@@ -21,7 +21,7 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            "message" => "user registered successfully",
+            "message" => "Inscription réussie !",
             "user" => $user
         ], 201);
     }

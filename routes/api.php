@@ -28,4 +28,8 @@ Route::post("logout", [AuthController::class, "logout"])->middleware('auth:sanct
 Route::get("podcasts",[PodcastController::class,"index"]);
 Route::get("podcasts/{id}/details",[PodcastController::class,"show"]);
 
-Route::put('podcasts/{id}', [PodcastController::class, 'update']);
+Route::middleware('auth:sanctum')->group(function () {
+Route::post("podcasts", [PodcastController::class, "store"]);
+Route::put('podcasts/{id}/update', [PodcastController::class, 'update']);
+Route::delete('podcasts/{id}', [PodcastController::class, 'destroy']);
+});

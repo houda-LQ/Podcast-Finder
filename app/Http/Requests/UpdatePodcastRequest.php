@@ -22,10 +22,9 @@ class UpdatePodcastRequest extends FormRequest
     public function rules(): array
     {
          return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'user_id' => 'required|exists:users,id',  
-        ];
+        'title' => 'sometimes|required|string|max:255',
+        'description' => 'sometimes|required|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+    ];
     }
 }
