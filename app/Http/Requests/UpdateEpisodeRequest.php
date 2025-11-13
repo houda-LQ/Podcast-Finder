@@ -11,7 +11,7 @@ class UpdateEpisodeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,10 @@ class UpdateEpisodeRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+          return [
+        'title' => 'sometimes|required|string|max:255',
+        'description' => 'sometimes|required|string',
+        'audio' => 'nullable|file|mimes:mp3,wav|max:10240'
+    ];
     }
 }

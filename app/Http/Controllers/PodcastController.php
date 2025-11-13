@@ -6,6 +6,7 @@ use App\Models\Podcast;
 use App\Http\Requests\StorePodcastRequest;
 use App\Http\Requests\UpdatePodcastRequest;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Http\Request;
 
 class PodcastController extends Controller
 {
@@ -103,7 +104,24 @@ class PodcastController extends Controller
         $this->authorize('delete', $podcast);
 
         $podcast->delete();
-        return response()->json(["message"=>"Cours supprimé"]);
+        return response()->json(["message"=>"Podcast supprimé"]);
     }
+
+public function search(Request $request)
+{
+    $search = $request->input('query');
+
+    $podcasts = Podcast::with('host') 
+        ->where('title', 'like', "%{$search}%")
+        ->orWhereHas('host', function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        })
+        ->get();
+
+    return response()->json($podcasts);
+}
+
+
+
 
 }

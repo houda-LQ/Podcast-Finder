@@ -14,7 +14,7 @@ class Podcast extends Model
     protected $fillable = ['title','description','image','user_id'];
 
     public function host(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function episodes(){

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEpisodeRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,14 +19,13 @@ class StoreEpisodeRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    
-       public function rules(): array
+    public function rules(): array
     {
        return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'audio' => 'nullable|file|mimes:mp3,wav|max:10240',
+            "name" => "required|string|max:10",
+            "email" => "required|string|email|unique:users",
+            "password" => "required|string|min:8|confirmed",
+            "role" => "required|in:utilisateur,Animateur",
         ];
     }
-    }
-
+}
